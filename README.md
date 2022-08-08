@@ -69,6 +69,104 @@ To finalize EDA, we developed a correlation analysis heatmap, where we convey th
 
 Finally, we analyzed the variables that appeared to correlate significantly with our target variable, `Loan_Status`. We see that people who are asking for loans in the urban area have an 18% probability of being granted the loan. Additionally, if the applicant is married, they have a 13% probability of having an accepted loan. Also, we can conclude that having a credit history has the most influence on whether the loan is accepted or rejected, with a 51% correlation.
 
+![Correlation Matrix](https://user-images.githubusercontent.com/90649106/183494711-e259ee89-f7aa-44b0-8099-1c129a30b8d6.png)
+
+Furthermore, we performed *Kendall’s Rank Correlation* hypothesis test to determine whether the correlation between the categorical target variable `Loan_Status` and the independent numerical variables is significant. For these tests, the null hypothesis would be that both variables are independent. Therefore, this analysis concludes that the numerical variables seem to be independent of the target variable.
+
+Variable|correlation|p-value|Null Hypothesis
+---|---|---|---
+ApplicantIncome |0.004 |0.890 |Not rejected 
+CoapplicantIncome |0.057 |0.059 |Not rejected 
+LoanAmount |-0.007 |0.796 |Not rejected 
+Loan_Amount_Term|-0.020|0.549|Not rejected 
+
+Moreover, we developed the $Xi^2$ hypothesis tests to evaluate the correlation between the target and categorical variables (see Table 5). For which we obtained the results that appear in Table 5. According to the results, we can see that the variables `Married`, `Education`, `Credit_History`, `Dependents_2`, `Property_Area_1`, and `Property_Area_2` seem to have a significant correlation with the target variable.
+
+Variable|stat|p-value|Null Hypothesis
+---|---|---|---
+Gender |1.279 |0.258 |Not reject 
+Married |13.594 |0.000 |Reject 
+Education |8.027 |0.005 |Reject 
+Self_Employed |0.476 |0.490 |Not reject 
+Credit_History |214.454 |0.000 |Reject 
+Dependendents_0 |0.000 |1.000| Not reject 
+Dependendents_1 |1.013| 0.314| Not reject 
+Dependendents_2 |3.242| 0.072| Reject 
+Dependendents_3 |0.726| 0.394| Not reject 
+Property_Area_0 |2.102 |0.147| Not reject 
+Property_Area_1 |25.870 |0.000| Reject 
+Property_Area_2 |12.630 |0.000 |Reject
+
+We developed an RFE feature selection strategy to finalize the data preparation phase. Through this technique we found the most significant variables that predict the `Loan_Status`. We first got the optimum number of features according to a Logistic Regression model. This analysis concluded that we required only six variables to achieve the highest accuracy possible. Next, we applied for this number again to the logistic regression. As a result, we obtained that `Married`, `Credit_History`, `Property_Area_1`, `ApplicantIncome`, `CoapplicantIncome`, and `LoanAmount` were the most valuable variables to predict `Loan_Status`. 
+
+### Multicollinearity
+Now that we have this information, we developed a VIF analysis of the significant variables, from which we obtained the results below. 
+
+Variable|stat
+---|---
+Married|2.3288
+Credit_History|4.2510
+Property_Area_1|1.4974
+ApplicantIncome|3.1519
+CoapplicantIncome|1.4250
+LoanAmount|5.8079
+
+This analysis tells us that the essential variables in the dataset do not contain multicollinearity problems, so all of these may be part of the final data to feed the model.
+
+## Modeling
+For this phase, we applied decision trees, logistic regression, support vector machines, Naïve Bayes, and ensemble methods bagging, boosting, and XGB models to predict the target variable Loan_Status. We first divided the data into the dependent and independent variables, called y and X, respectively, to evaluate these models. Then, we divided them into training and test set, with an 80%-20% ratio.
+
+## Evaluation
+For the evaluation of the algorithms, we developed a K Fold Cross-Validation such as in the figure below. This technique consists of the training set partitioning into equal-sized K parts. One of these partitions is used as a validation set and the rest as a sub-training set. For this strategy, we defined a total of 10 partitions. 
+
+![k-fold](https://user-images.githubusercontent.com/90649106/183498743-d77cbf70-dfff-40d2-90f5-f3669d6b8598.png)
 
 
+Now we show the mean of the metrics for each algorithm in terms of ROC/AUC, accuracy, precision, recall, and f1 score.
 
+Algorithm|ROC AUC Mean|Accuracy Mean|Precision Mean| Recall Mean| F1 Score Mean
+---|---|---|---|---|---
+Random Forest|	92.65|	85.37|	87.00|	83.60|	84.98
+XGB|	90.82	|84.07|	85.57	|81.99|	83.51|
+GBM|	87.69|	80.93|	77.17	|86.98	|81.66|
+Decision Tree Classifier|	84.50	|84.44|	86.52|	81.36	|83.73
+Logistic Regression|	81.00|	72.41	|66.97	|88.72	|75.91
+SVM|	79.10|	71.11	|66.13	|87.99	|74.66
+Naïve Bayes|	78.81|	73.33	|65.91|	96.97	|78.31
+
+Next, we convey the boxplots that contain the distribution of the accuracy score, and ROC/AUC score for each algorithm. From these plots, we can conclude that some of the best models for fitting these data are GBM, XGB, Decision Tree, and Random Forest. These models achieve significantly higher accuracy and ROC/AUC scores than others.
+
+![ROC AUC](https://user-images.githubusercontent.com/90649106/183499620-143287df-4619-49ab-9db3-849ddd997331.png)
+![Accuracy](https://user-images.githubusercontent.com/90649106/183499629-78eed8dd-b64a-4010-81f9-48ba8ff19984.png)
+
+### Hyperparameter Tuning
+For the next iteration, we developed some hyperparameter tuning for the algorithms that attained the best accuracy and AUC scores (GBM, XGB, Decision Tree, and Random Forest) so that they may further improve their metrics. The hyperparameter tuning was developed through the use of GridSearchCV, this function allowed us to try different values for several parameter. Where the results were the following:
+- The best parameters for Random Forest are {'max_depth': 13, 'min_samples_leaf': 1, 'n_es timators': 35}
+- The best parameters for GBM are {'learning_rate': 0.1, 'n_estimators': 250, 'max_depth': 5}
+- The best parameters for Decision Tress are {'criterion': 'entropy', 'max_depth': 10, 'min_samples_leaf': 5}
+- The best parameters for XGB are {'gamma': 0.3, 'max_depth': 15, 'min_child_weight': 1}
+
+The resulting metrics of these changes appear below:
+Model|	ROC/AUC	|Accuracy	|Precision|	Recall|	F1 Score
+---|---|---|---|---|---
+Gradient Boosting|	0.922242|	0.866667|	0.900000	|0.851351	|0.875000
+Random Forest|	0.892889|	0.851852	|0.897059|	0.824324	|0.859155
+XGB	|0.874169|	0.807407|	0.875000|	0.756757|	0.811594
+Decision Tree|	0.822995|	0.725926|	0.793651|	0.675676|	0.729927
+Naive Bayes|	0.739699|	0.718519|	0.673077	|0.945946|	0.786517
+Logistic Regression|	0.733053|	0.718519|	0.687500|	0.891892	|0.776471
+Support Vector Machine|	0.706690|	0.733333|	0.686275|	0.945946|	0.795455
+
+This table shows that the Gradient Boosting became the optimal model to make predictions for the given dataset, as it has relatively the highest combination of AUC, accuracy, precision, recall, and F1 scores. Hence, we used Gradient Boosting to evaluate its performance when training in the entire train dataset and testing in the true testing dataset.
+
+Model|	ROC/AUC	|Accuracy	|Precision|	Recall|	F1 Score
+---|---|---|---|---|---
+Gradient Boosting|	0.873597|	0.863905|	0.845238|	0.876543|	0.860606
+
+![Cross Validation](https://user-images.githubusercontent.com/90649106/183500834-ba6e385c-13ab-47a3-81c2-cbd5d5878119.png)
+
+## Deployment
+We applied the best model obtained to make predictions using the attached *predict.csv* as the test set and *loan.csv* as training set. We created a new Jupyter Notebook that cleans the predict.csv dataset by imputing missing values, labeling and applying one-hot encoding on categorical data, transforming continuous values into integers, and selecting the essential features. The predictions for each user appear in *Model Predictions.xlsx*.
+
+# Conclusion
+In conclusion, we used the Dream Housing Finance Loan dataset to build a machine learning classifier to automate the loan eligibility process. This model attained a reasonable accuracy score of 87%. Additionally, according to this analysis, we can conclude that the customer segments that DHF should target are applicants that appear to be married and are looking for a property in the suburban area. This situation could mean that they may be planning to grow a family; thus, they have a higher probability of being responsible for avoiding debts. Furthermore, these applicants and their co-applicants, should count on a high amount of income. If DHF targets people who follow these characteristics, they can ensure that customers will be capable of paying back; hence, DHF will be more secure in lending a higher amount of money to them. Finally, and most importantly, ensure that the person has a credit history because applicants who have repaid their previous debts have a significantly higher probability of repaying this one.
