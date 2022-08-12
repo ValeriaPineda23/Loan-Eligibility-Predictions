@@ -80,7 +80,7 @@ CoapplicantIncome |0.057 |0.059 |Not rejected
 LoanAmount |-0.007 |0.796 |Not rejected 
 Loan_Amount_Term|-0.020|0.549|Not rejected 
 
-Moreover, we developed the $Xi^2$ hypothesis tests to evaluate the correlation between the target and categorical variables (see Table 5). For which we obtained the results that appear in Table 5. According to the results, we can see that the variables `Married`, `Education`, `Credit_History`, `Dependents_2`, `Property_Area_1`, and `Property_Area_2` seem to have a significant correlation with the target variable.
+Moreover, we developed the $Xi^2$ hypothesis tests to evaluate the correlation between the target and categorical variables. According to the results in tha table below, we can see that the variables `Married`, `Education`, `Credit_History`, `Dependents_2`, `Property_Area_1`, and `Property_Area_2` seem to have a significant correlation with the target variable.
 
 Variable|stat|p-value|Null Hypothesis
 ---|---|---|---
@@ -104,14 +104,14 @@ Now that we have this information, we developed a VIF analysis of the significan
 
 Variable|stat
 ---|---
-Married|2.3288
-Credit_History|4.2510
-Property_Area_1|1.4974
-ApplicantIncome|3.1519
-CoapplicantIncome|1.4250
-LoanAmount|5.8079
+Married	2.267208
+Credit_History|	2.796159
+Property_Area_1	|1.462494
+ApplicantIncome	|3.139574
+CoapplicantIncome|	1.419624
+LoanAmount|	5.755920
 
-This analysis tells us that the essential variables in the dataset do not contain multicollinearity problems, so all of these may be part of the final data to feed the model.
+This analysis tells us that the essential variables do not contain multicollinearity problems, so all of these may be part of the final data to feed the model.
 
 ## Modeling
 For this phase, we applied decision trees, logistic regression, support vector machines, Naïve Bayes, and ensemble methods bagging, boosting, and XGB models to predict the target variable Loan_Status. We first divided the data into the dependent and independent variables, called y and X, respectively, to evaluate these models. Then, we divided them into training and test set, with an 80%-20% ratio.
@@ -136,8 +136,9 @@ Naïve Bayes|	78.81|	73.33	|65.91|	96.97	|78.31
 
 Next, we convey the boxplots that contain the distribution of the accuracy score, and ROC/AUC score for each algorithm. From these plots, we can conclude that some of the best models for fitting these data are GBM, XGB, Decision Tree, and Random Forest. These models achieve significantly higher accuracy and ROC/AUC scores than others.
 
-![ROC AUC](https://user-images.githubusercontent.com/90649106/183499620-143287df-4619-49ab-9db3-849ddd997331.png)
-![Accuracy](https://user-images.githubusercontent.com/90649106/183499629-78eed8dd-b64a-4010-81f9-48ba8ff19984.png)
+![Accuracy Score](https://user-images.githubusercontent.com/90649106/184422757-485c1627-0a13-4cd5-8435-87cd3919a291.png)
+![ROC AUC Score](https://user-images.githubusercontent.com/90649106/184422759-b5282bc0-7ae1-4a28-921c-64fe5f271b2e.png)
+
 
 ### Hyperparameter Tuning
 For the next iteration, we developed some hyperparameter tuning for the algorithms that attained the best accuracy and AUC scores (GBM, XGB, Decision Tree, and Random Forest) so that they may further improve their metrics. The hyperparameter tuning was developed through the use of GridSearchCV, this function allowed us to try different values for several parameter. Where the results were the following:
@@ -163,8 +164,8 @@ Model|	ROC/AUC	|Accuracy	|Precision|	Recall|	F1 Score
 ---|---|---|---|---|---
 Random Forest|	0.920244|	0.87574|	0.857143	|0.888889	|0.872727
 
+![result matrix](https://user-images.githubusercontent.com/90649106/184422321-1b40685e-9476-4fab-b09a-960cb0fd98bf.png)
 
-![Cross Validation](https://user-images.githubusercontent.com/90649106/183500834-ba6e385c-13ab-47a3-81c2-cbd5d5878119.png)
 
 ## Deployment
 We applied the best model obtained to make predictions using the attached *predict.csv* as the test set and *loan.csv* as training set. We created a new Jupyter Notebook (CRISP-DM (Deployment Phase).ipynb) that cleans the *predict.csv* dataset by imputing missing values, labeling and applying one-hot encoding on categorical data, transforming continuous values into integers, and selecting the essential features. The predictions for each user appear in *Model Predictions.xlsx*.
