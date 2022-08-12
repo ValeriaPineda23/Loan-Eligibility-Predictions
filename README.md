@@ -141,27 +141,28 @@ Next, we convey the boxplots that contain the distribution of the accuracy score
 
 ### Hyperparameter Tuning
 For the next iteration, we developed some hyperparameter tuning for the algorithms that attained the best accuracy and AUC scores (GBM, XGB, Decision Tree, and Random Forest) so that they may further improve their metrics. The hyperparameter tuning was developed through the use of GridSearchCV, this function allowed us to try different values for several parameter. Where the results were the following:
-- The best parameters for Random Forest are {'max_depth': 13, 'min_samples_leaf': 1, 'n_es timators': 35}
-- The best parameters for GBM are {'learning_rate': 0.1, 'n_estimators': 250, 'max_depth': 5}
-- The best parameters for Decision Tress are {'criterion': 'entropy', 'max_depth': 10, 'min_samples_leaf': 5}
-- The best parameters for XGB are {'gamma': 0.3, 'max_depth': 15, 'min_child_weight': 1}
+- The best parameters for Random Forest are {'criterion': 'gini', 'max_depth': 13, 'min_samples_leaf': 1, 'n_estimators': 45}
+- The best parameters for GBM are {'learning_rate': 0.1, 'n_estimators': 250, 'max_depth': 4}
+- The best parameters for Decision Tress are {'criterion': 'gini', 'max_depth': 10, 'min_samples_leaf': 5}
+- The best parameters for XGB are {'gamma': 0.1, 'max_depth': 15, 'min_child_weight': 1}
 
 The resulting metrics of these changes appear below:
 Model|	ROC/AUC	|Accuracy	|Precision|	Recall|	F1 Score
 ---|---|---|---|---|---
-Gradient Boosting|	0.922242|	0.866667|	0.900000	|0.851351	|0.875000
-Random Forest|	0.892889|	0.851852	|0.897059|	0.824324	|0.859155
-XGB	|0.874169|	0.807407|	0.875000|	0.756757|	0.811594
-Decision Tree|	0.822995|	0.725926|	0.793651|	0.675676|	0.729927
-Naive Bayes|	0.739699|	0.718519|	0.673077	|0.945946|	0.786517
-Logistic Regression|	0.733053|	0.718519|	0.687500|	0.891892	|0.776471
-Support Vector Machine|	0.706690|	0.733333|	0.686275|	0.945946|	0.795455
+Random Forest|0.928445|	0.866667|	0.878378|	0.878378|	0.878378
+Gradient Boosting|	0.919805|	0.844444	|0.884058|	0.824324	|0.853147
+XGB	|0.888569	|0.829630	|0.892308	|0.783784	|0.834532
+Decision Tree|	0.849801	|0.785185	|0.816901|	0.783784	|0.800000
+Support Vector Machine	|0.763181	|0.718519	|0.695652	|0.864865	|0.771084
+Logistic Regression	|0.753434	|0.711111	|0.701149|	0.824324|	0.757764
+Naive Bayes	|0.745680	|0.718519	|0.680000	|0.918919	|0.781609
 
-This table shows that the Gradient Boosting became the optimal model to make predictions for the given dataset, as it has relatively the highest combination of AUC, accuracy, precision, recall, and F1 scores. Hence, we used Gradient Boosting to evaluate its performance when training in the entire train dataset and testing in the true testing dataset.
+This table shows that the Random Forest became the optimal model to make predictions for the given dataset, as it has relatively the highest combination of AUC, accuracy, precision, recall, and F1 scores. Hence, we used this model to evaluate its performance when training in the entire train dataset and testing in the true testing dataset.
 
 Model|	ROC/AUC	|Accuracy	|Precision|	Recall|	F1 Score
 ---|---|---|---|---|---
-Gradient Boosting|	0.873597|	0.863905|	0.845238|	0.876543|	0.860606
+Random Forest|	0.920244|	0.87574|	0.857143	|0.888889	|0.872727
+
 
 ![Cross Validation](https://user-images.githubusercontent.com/90649106/183500834-ba6e385c-13ab-47a3-81c2-cbd5d5878119.png)
 
@@ -169,4 +170,4 @@ Gradient Boosting|	0.873597|	0.863905|	0.845238|	0.876543|	0.860606
 We applied the best model obtained to make predictions using the attached *predict.csv* as the test set and *loan.csv* as training set. We created a new Jupyter Notebook (CRISP-DM (Deployment Phase).ipynb) that cleans the *predict.csv* dataset by imputing missing values, labeling and applying one-hot encoding on categorical data, transforming continuous values into integers, and selecting the essential features. The predictions for each user appear in *Model Predictions.xlsx*.
 
 # Conclusion
-In conclusion, we used the Dream Housing Finance Loan dataset to build a machine learning classifier to automate the loan eligibility process. This model attained a reasonable accuracy score of 87%. Additionally, according to this analysis, we can conclude that the customer segments that DHF should target are applicants that appear to be married and are looking for a property in the suburban area. This situation could mean that they may be planning to grow a family; thus, they have a higher probability of being responsible for avoiding debts. Furthermore, these applicants and their co-applicants, should count on a high amount of income. If DHF targets people who follow these characteristics, they can ensure that customers will be capable of paying back; hence, DHF will be more secure in lending a higher amount of money to them. Finally, and most importantly, ensure that the person has a credit history because applicants who have repaid their previous debts have a significantly higher probability of repaying this one.
+In conclusion, we used the Dream Housing Finance Loan dataset to build a machine learning classifier to automate the loan eligibility process. This model attained a reasonable accuracy score of 87.5%. Additionally, according to this analysis, we can conclude that the customer segments that DHF should target are applicants that appear to be married and are looking for a property in the suburban area. This situation could mean that they may be planning to grow a family; thus, they have a higher probability of being responsible for avoiding debts. Furthermore, these applicants and their co-applicants, should count on a high amount of income. If DHF targets people who follow these characteristics, they can ensure that customers will be capable of paying back; hence, DHF will be more secure in lending a higher amount of money to them. Finally, and most importantly, ensure that the person has a credit history because applicants who have repaid their previous debts have a significantly higher probability of repaying this one.
